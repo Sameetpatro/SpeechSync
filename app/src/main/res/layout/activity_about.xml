@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:padding="16dp"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- App Title + Subtitle -->
+        <TextView
+            android:id="@+id/tvAppTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SpeechSync"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="?colorPrimary"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAppSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Speech-to-Speech Translation for Indian Languages"
+            android:textSize="13sp"
+            android:textColor="@color/text_secondary_light"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Tech Tags -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NLP"
+                android:textSize="11sp"
+                android:textColor="?colorPrimary"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/tag_background"
+                android:layout_marginEnd="6dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Speech-to-Speech"
+                android:textSize="11sp"
+                android:textColor="?colorPrimary"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/tag_background"
+                android:layout_marginEnd="6dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Android"
+                android:textSize="11sp"
+                android:textColor="?colorPrimary"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/tag_background"/>
+        </LinearLayout>
+
+        <!-- Supervisor Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardSupervisor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="?colorSurface"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Photo + Name Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/imgSupervisor"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/ic_auth_img"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/circle_clip"
+                        android:contentDescription="Dr. Abhik Jana"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvSupervisorName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dr. Abhik Jana"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium"
+                            android:textColor="?colorOnSurface"/>
+
+                        <TextView
+                            android:id="@+id/tvSupervisorTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="School of Electrical and Computer Science, IIT Bhubaneswar"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary_light"
+                            android:layout_marginTop="2dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Description -->
+                <TextView
+                    android:id="@+id/tvSupervisorDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="This project has been developed under the guidance of Dr. Abhik Jana. His work spans machine learning, signal processing, and intelligent systems, and his inputs shaped both the research direction and engineering choices behind SpeechSync."
+                    android:textSize="13sp"
+                    android:textColor="?colorOnSurface"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="12dp"/>
+
+                <!-- LinkedIn Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@android:drawable/ic_menu_share"
+                        android:layout_marginEnd="6dp"
+                        app:tint="?colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/tvSupervisorLinkedIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LinkedIn • Dr. Abhik Jana"
+                        android:textSize="13sp"
+                        android:textColor="?colorPrimary"
+                        android:autoLink="web"
+                        android:textIsSelectable="true"
+                        android:linksClickable="true"
+                        android:layout_marginEnd="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tvSupervisorLinkedInUrl"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="https://www.linkedin.com/in/abhik-jana"
+                        android:textSize="0sp"
+                        android:autoLink="web"
+                        android:visibility="gone"/>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Developer Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardDeveloper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="?colorSurface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvDevLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Designed and Developed by"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary_light"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvDevName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sameet Patro"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="?colorOnSurface"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:id="@+id/tvDevRole"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Research Intern • NLP and Speech • IIT Bhubaneswar"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary_light"
+                    android:layout_marginTop="2dp"/>
+
+                <!-- Short dev blurb -->
+                <TextView
+                    android:id="@+id/tvDevDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Working on multilingual speech-to-speech translation, bridging Android engineering with deep learning pipelines for ASR, MT, and TTS."
+                    android:textSize="13sp"
+                    android:textColor="?colorOnSurface"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="10dp"/>
+
+                <!-- Dev LinkedIn Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@android:drawable/ic_menu_share"
+                        android:layout_marginEnd="6dp"
+                        app:tint="?colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/tvDevLinkedIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LinkedIn • Sameet Patro"
+                        android:textSize="13sp"
+                        android:textColor="?colorPrimary"
+                        android:autoLink="web"
+                        android:textIsSelectable="true"
+                        android:linksClickable="true"
+                        android:layout_marginEnd="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tvDevLinkedInUrl"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="https://www.linkedin.com/in/sameet-patro-257257280/"
+                        android:textSize="0sp"
+                        android:autoLink="web"
+                        android:visibility="gone"/>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Tiny footer -->
+        <TextView
+            android:id="@+id/tvFooter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Built at IIT Bhubaneswar • 2025"
+            android:textSize="11sp"
+            android:textColor="@color/text_secondary_light"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

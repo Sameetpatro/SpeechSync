@@ -1,7 +1,10 @@
 package com.example.speechsync
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.AdapterView
@@ -23,14 +26,38 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Set toolbar as ActionBar
+        setSupportActionBar(binding.toolbarHome)
+
         setupLanguageSpinners()
         setupButtons()
+    }
+
+    // ---------------------- MENU HANDLING ----------------------
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.home_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_about -> {
+                startActivity(Intent(this, AboutActivity::class.java))
+                true
+            }
+            R.id.action_sign_out -> {
+                // TODO: real sign-out: clear prefs + go to LoginActivity
+                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     // ---------------------- LANGUAGE SPINNERS ----------------------
 
     private fun setupLanguageSpinners() {
-        // defined in strings.xml as languages_list
         val languages = resources.getStringArray(R.array.languages_list).toList()
 
         val adapter = ArrayAdapter(
@@ -42,7 +69,6 @@ class HomeActivity : AppCompatActivity() {
         binding.spinnerInputLanguage.adapter = adapter
         binding.spinnerTargetLanguage.adapter = adapter
 
-        // Input defaults to "Select language"
         binding.spinnerInputLanguage.setSelection(0)
         binding.spinnerTargetLanguage.setSelection(0)
 
@@ -59,23 +85,6 @@ class HomeActivity : AppCompatActivity() {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-        setSupportActionBar(binding.toolbarHome)
-
-        binding.toolbarHome.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_about -> {
-                    Toast.makeText(this, "About VaaniBridge (placeholder)", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.action_sign_out -> {
-                    // TODO: clear login prefs and go back to LoginActivity
-                    Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                else -> false
-            }
-        }
-
 
         binding.spinnerTargetLanguage.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -87,7 +96,6 @@ class HomeActivity : AppCompatActivity() {
                 ) {
                     selectedTargetLang = if (position == 0) null else languages[position]
 
-                    // If both selected & same → toast + clear target
                     if (selectedInputLang != null &&
                         selectedTargetLang != null &&
                         selectedInputLang == selectedTargetLang
@@ -98,7 +106,6 @@ class HomeActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        // Reset target spinner
                         binding.spinnerTargetLanguage.setSelection(0)
                         selectedTargetLang = null
                     }
@@ -111,13 +118,10 @@ class HomeActivity : AppCompatActivity() {
     // ---------------------- BUTTON SETUP ----------------------
 
     private fun setupButtons() {
-
-        // Mic button: start/stop recording
         binding.fabMicrophone.setOnClickListener {
             toggleRecording()
         }
 
-        // "Do you want to continue?" – placeholder for now
         binding.btnContinueQuestion.setOnClickListener {
             Toast.makeText(
                 this,
@@ -126,23 +130,19 @@ class HomeActivity : AppCompatActivity() {
             ).show()
         }
 
-        // Translate button: trigger backend later, for now simulate loading
         binding.btnTranslate.setOnClickListener {
             if (!validateLanguages()) return@setOnClickListener
             startLoadingUI()
 
-            // Simulate backend delay → 2s then translation ready
             binding.btnTranslate.postDelayed({
                 onTranslationReady(durationMs = 5000L)  // fake 5s audio
             }, 2000)
         }
 
-        // Play/Pause: for now just toast
         binding.btnPlayPause.setOnClickListener {
             Toast.makeText(this, "Play/Pause clicked (dummy)", Toast.LENGTH_SHORT).show()
         }
 
-        // Retry: let user record again, keep language selection
         binding.btnRetry.setOnClickListener {
             binding.tvStatus.text = getString(R.string.status_tap_mic)
             binding.tvAudioStatus.text = "Waiting for translation..."
@@ -156,15 +156,18 @@ class HomeActivity : AppCompatActivity() {
             val inputPos = binding.spinnerInputLanguage.selectedItemPosition
             val targetPos = binding.spinnerTargetLanguage.selectedItemPosition
 
-            if (inputPos != 0 && targetPos != 0) { // ignore "Select language"
+            if (inputPos != 0 && targetPos != 0) {
                 binding.spinnerInputLanguage.setSelection(targetPos)
                 binding.spinnerTargetLanguage.setSelection(inputPos)
             } else {
-                Toast.makeText(this, "Select both languages before swapping.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Select both languages before swapping.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
-        // Reset: clear everything
         binding.btnReset.setOnClickListener {
             resetAll()
         }
@@ -198,7 +201,6 @@ class HomeActivity : AppCompatActivity() {
         isRecording = true
         binding.tvStatus.text = getString(R.string.status_listening)
 
-        // pulsing animation on mic
         val scaleX = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleX", 1f, 1.2f, 1f)
         val scaleY = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleY", 1f, 1.2f, 1f)
         scaleX.duration = 1000
@@ -212,7 +214,6 @@ class HomeActivity : AppCompatActivity() {
 
         binding.fabMicrophone.backgroundTintList = getColorStateList(R.color.recording)
 
-        // simulate 3 sec recording
         binding.fabMicrophone.postDelayed({
             if (isRecording) stopRecording()
         }, 3000)
@@ -227,7 +228,6 @@ class HomeActivity : AppCompatActivity() {
         binding.fabMicrophone.scaleY = 1f
         binding.fabMicrophone.backgroundTintList = getColorStateList(R.color.primary)
 
-        // here you’d normally send audio to backend; we just show loading for now
         startLoadingUI()
 
         binding.fabMicrophone.postDelayed({
@@ -254,13 +254,11 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun resetAll() {
-        // reset languages
         binding.spinnerInputLanguage.setSelection(0)
         binding.spinnerTargetLanguage.setSelection(0)
         selectedInputLang = null
         selectedTargetLang = null
 
-        // reset recording + audio state
         isRecording = false
         binding.fabMicrophone.clearAnimation()
         binding.fabMicrophone.scaleX = 1f

@@ -32,15 +32,17 @@
     <string name="new_translation_button">New Translation</string>
     <string name="playing_translation">Playing translation…</string>
 
-    <!-- Language Options -->
-    <string-array name="languages">
-        <item>Hindi</item>
-        <item>English</item>
-        <item>Bengali</item>
-        <item>Odia</item>
-    </string-array>
 
     <!-- Sample Text -->
     <string name="sample_recognized">Hello, how are you today?</string>
     <string name="sample_translated">नमस्ते, आप आज कैसे हैं?</string>
+
+    <string-array name="languages_list">
+        <item>Select language</item>
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Bengali</item>
+        <item>Odia</item>
+    </string-array>
+
 </resources>

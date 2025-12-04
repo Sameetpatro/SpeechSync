@@ -3,38 +3,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?android:colorBackground">
+    android:layout_height="match_parent">
 
-    <!-- App Bar -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <!-- Top App Bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarHome"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="?colorPrimary"
-        app:elevation="4dp">
+        app:title="@string/app_name"
+        app:titleTextColor="@android:color/white"
+        app:menu="@menu/home_menu"
+        app:elevation="4dp" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:titleTextColor="@color/white"
-            app:title="@string/app_name"
-            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- Main Content -->
+    <!-- Scrollable Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:padding="8dp"
+        android:layout_marginTop="?attr/actionBarSize">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:padding="8dp">
 
             <!-- Language Selection Card -->
             <com.google.android.material.card.MaterialCardView
@@ -47,47 +41,90 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp"
+                    android:gravity="center_horizontal">
 
+                    <!-- Input Language -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/target_language_label"
-                        android:textSize="14sp"
+                        android:text="Input language"
+                        android:textSize="13sp"
                         android:textColor="@color/text_secondary_light"
                         android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="4dp"
+                        android:gravity="center"/>
 
                     <Spinner
-                        android:id="@+id/spinnerLanguage"
+                        android:id="@+id/spinnerInputLanguage"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@android:drawable/btn_dropdown"
-                        android:padding="12dp"/>
+                        android:layout_height="40dp"
+                        android:padding="4dp"
+                        android:gravity="center"/>
 
+                    <!-- Swap Button Row -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSwapLanguages"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            style="@style/Widget.Material3.Button.Icon"
+                            app:icon="@android:drawable/ic_menu_rotate"
+                            app:iconSize="18dp"
+                            app:backgroundTint="?colorPrimary"
+                            app:iconTint="@android:color/white"
+                            android:contentDescription="Swap input and target language"/>
+                    </LinearLayout>
+
+                    <!-- Target Language -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Target language"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_secondary_light"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="4dp"
+                        android:gravity="center"/>
+
+                    <Spinner
+                        android:id="@+id/spinnerTargetLanguage"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:padding="4dp"
+                        android:gravity="center"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Microphone Button -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabMicrophone"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:src="@drawable/ic_microphone"
-                app:fabCustomSize="80dp"
+                app:fabCustomSize="72dp"
                 app:tint="@color/white"
                 app:backgroundTint="?colorPrimary"
                 app:elevation="6dp"
                 app:layout_constraintTop_toBottomOf="@id/languageCard"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="40dp"/>
+                android:layout_marginTop="24dp"/>
 
             <!-- Status Text -->
             <TextView
@@ -95,131 +132,156 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/status_tap_mic"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textColor="@color/text_secondary_light"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 app:layout_constraintTop_toBottomOf="@id/fabMicrophone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="8dp"/>
 
-            <!-- Recognized Speech Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/recognizedSpeechCard"
+            <!-- "Do you want to continue" Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnContinueQuestion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="?colorSurface"
+                android:text="Do you want to continue?"
+                android:textSize="14sp"
+                style="@style/Widget.SpeechSync.Button"
+                app:cornerRadius="12dp"
                 app:layout_constraintTop_toBottomOf="@id/tvStatus"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="32dp">
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+            <!-- Translate Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnTranslate"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:text="Translate"
+                android:textSize="15sp"
+                style="@style/Widget.SpeechSync.Button"
+                app:cornerRadius="12dp"
+                app:icon="@android:drawable/ic_menu_rotate"
+                app:iconGravity="textStart"
+                app:layout_constraintTop_toBottomOf="@id/btnContinueQuestion"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/recognized_speech_label"
-                        android:textSize="14sp"
-                        android:textColor="?colorPrimary"
-                        android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="8dp"/>
-
-                    <TextView
-                        android:id="@+id/tvRecognizedSpeech"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="60dp"
-                        android:text=""
-                        android:textSize="15sp"
-                        android:textColor="?colorOnSurface"
-                        android:fontFamily="sans-serif"
-                        android:hint="Your speech will appear here..."
-                        android:textColorHint="@color/text_secondary_light"/>
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Translated Output Card -->
+            <!-- Audio Status / Player Section -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/translatedOutputCard"
+                android:id="@+id/audioStatusCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
                 app:cardBackgroundColor="?colorSurface"
-                app:layout_constraintTop_toBottomOf="@id/recognizedSpeechCard"
+                app:layout_constraintTop_toBottomOf="@id/btnTranslate"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/translated_output_label"
-                        android:textSize="14sp"
-                        android:textColor="?colorAccent"
-                        android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="8dp"/>
-
-                    <TextView
-                        android:id="@+id/tvTranslatedOutput"
+                    <!-- Loading Indicator -->
+                    <LinearLayout
+                        android:id="@+id/loadingContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="60dp"
-                        android:text=""
-                        android:textSize="15sp"
-                        android:textColor="?colorOnSurface"
-                        android:fontFamily="sans-serif"
-                        android:hint="Translation will appear here..."
-                        android:textColorHint="@color/text_secondary_light"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
+                        <ProgressBar
+                            android:id="@+id/progressLoading"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:visibility="gone"/>
+
+                        <TextView
+                            android:id="@+id/tvAudioStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Waiting for translation..."
+                            android:textSize="14sp"
+                            android:textColor="@color/text_secondary_light"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+
+                    <!-- Player Controls -->
+                    <LinearLayout
+                        android:id="@+id/playerContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="12dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPlayPause"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.Material3.Button.Icon"
+                            app:icon="@android:drawable/ic_media_play"
+                            app:iconSize="22dp"/>
+
+                        <TextView
+                            android:id="@+id/tvAudioDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00"
+                            android:textSize="14sp"
+                            android:textColor="?colorOnSurface"
+                            android:layout_marginStart="12dp"/>
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Action Buttons -->
+            <!-- Retry and Reset Buttons -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnPlayTranslation"
+                android:id="@+id/btnRetry"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:text="@string/play_translation_button"
-                android:textSize="16sp"
+                android:layout_height="44dp"
+                android:text="Retry"
+                android:textSize="14sp"
                 style="@style/Widget.SpeechSync.Button"
-                app:icon="@android:drawable/ic_media_play"
-                app:iconGravity="textStart"
                 app:cornerRadius="12dp"
-                app:layout_constraintTop_toBottomOf="@id/translatedOutputCard"
+                app:layout_constraintTop_toBottomOf="@id/audioStatusCard"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="24dp"/>
+                app:layout_constraintEnd_toStartOf="@+id/btnReset"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"/>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnNewTranslation"
+                android:id="@+id/btnReset"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:text="@string/new_translation_button"
-                android:textSize="16sp"
-                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_height="44dp"
+                android:text="Reset"
+                android:textSize="14sp"
+                style="@style/Widget.SpeechSync.Button"
                 app:cornerRadius="12dp"
-                android:textColor="?colorPrimary"
-                app:layout_constraintTop_toBottomOf="@id/btnPlayTranslation"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/audioStatusCard"
+                app:layout_constraintStart_toEndOf="@id/btnRetry"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="24dp"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="16dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

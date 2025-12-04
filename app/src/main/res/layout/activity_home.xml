@@ -30,86 +30,110 @@
             android:layout_height="wrap_content"
             android:padding="8dp">
 
-            <!-- Language Selection Card -->
+            <!-- Language Selection Card (clean layout) -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/languageCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="?colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                app:cardBackgroundColor="@android:color/white"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp">
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp"
-                    android:gravity="center_horizontal">
+                    android:padding="16dp">
 
-                    <!-- Input Language -->
+                    <!-- Row label -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Input language"
+                        android:text="Languages"
                         android:textSize="13sp"
+                        android:textStyle="bold"
                         android:textColor="@color/text_secondary_light"
                         android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="4dp"
-                        android:gravity="center"/>
+                        android:layout_marginBottom="8dp" />
 
-                    <Spinner
-                        android:id="@+id/spinnerInputLanguage"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:padding="4dp"
-                        android:gravity="center"/>
-
-                    <!-- Swap Button Row -->
+                    <!-- Input / Swap / Target in one row -->
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="center"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp">
+                        android:gravity="center_vertical">
 
+                        <!-- Input language -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Input"
+                                android:textSize="12sp"
+                                android:textColor="@color/text_secondary_light"
+                                android:layout_marginBottom="2dp" />
+
+                            <Spinner
+                                android:id="@+id/spinnerInputLanguage"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:paddingHorizontal="4dp" />
+                        </LinearLayout>
+
+                        <!-- Swap icon in center -->
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnSwapLanguages"
-                            android:layout_width="wrap_content"
-                            android:layout_height="36dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             style="@style/Widget.Material3.Button.Icon"
-                            app:icon="@android:drawable/ic_menu_rotate"
+                            app:icon="@drawable/ic_swap"
                             app:iconSize="18dp"
-                            app:backgroundTint="?colorPrimary"
-                            app:iconTint="@android:color/white"
-                            android:contentDescription="Swap input and target language"/>
+                            app:backgroundTint="@android:color/transparent"
+                            app:iconTint="?colorPrimary"
+                            android:elevation="0dp"
+                            android:translationX="-6dp"
+                            android:contentDescription="Swap input and target language"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:foreground="?attr/selectableItemBackgroundBorderless" />
+
+                        <!-- Target language -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Target"
+                                android:textSize="12sp"
+                                android:textColor="@color/text_secondary_light"
+                                android:layout_marginBottom="2dp" />
+
+                            <Spinner
+                                android:id="@+id/spinnerTargetLanguage"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:paddingHorizontal="4dp" />
+                        </LinearLayout>
                     </LinearLayout>
-
-                    <!-- Target Language -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Target language"
-                        android:textSize="13sp"
-                        android:textColor="@color/text_secondary_light"
-                        android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="4dp"
-                        android:gravity="center"/>
-
-                    <Spinner
-                        android:id="@+id/spinnerTargetLanguage"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:padding="4dp"
-                        android:gravity="center"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
 
             <!-- Microphone Button -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton

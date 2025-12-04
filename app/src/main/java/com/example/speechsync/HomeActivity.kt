@@ -47,8 +47,7 @@ class HomeActivity : AppCompatActivity() {
                 true
             }
             R.id.action_sign_out -> {
-                // TODO: real sign-out: clear prefs + go to LoginActivity
-                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+                performSignOut()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -272,4 +271,22 @@ class HomeActivity : AppCompatActivity() {
 
         Toast.makeText(this, "Reset complete.", Toast.LENGTH_SHORT).show()
     }
+
+    private fun performSignOut() {
+
+        // Clear stored session
+        val prefs = getSharedPreferences("SpeechSyncPrefs", MODE_PRIVATE)
+        prefs.edit()
+            .clear()
+            .apply()
+
+        // Go back to LoginActivity & clear back stack
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+
+        // Kill current activity
+        finish()
+    }
+
 }

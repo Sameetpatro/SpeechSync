@@ -1,7 +1,9 @@
 package com.example.speechsync
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,29 +13,79 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.speechsync.databinding.ActivityHomeBinding
+import kotlinx.coroutines.launch
+import java.io.File
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var audioRecorder: AudioRecorder
+    private lateinit var translationService: TranslationService
+    private lateinit var audioPlayer: AudioPlayer
 
-    private var isRecording = false
+    private var recordedFile: File? = null
     private var selectedInputLang: String? = null
     private var selectedTargetLang: String? = null
+
+    private val langCodeMap = mapOf(
+        "English" to "en",
+        "Hindi" to "hi",
+        "Bengali" to "bn",
+        "Odia" to "od"
+    )
+
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 100
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Set toolbar as ActionBar
         setSupportActionBar(binding.toolbarHome)
 
+        audioRecorder = AudioRecorder(this)
+        translationService = TranslationService()
+        audioPlayer = AudioPlayer(this)
+
+        checkPermissions()
         setupLanguageSpinners()
         setupButtons()
     }
 
-    // ---------------------- MENU HANDLING ----------------------
+    override fun onDestroy() {
+        super.onDestroy()
+        audioPlayer.release()
+    }
+
+    private fun checkPermissions() {
+        val permissions = arrayOf(Manifest.permission.RECORD_AUDIO)
+        val notGranted = permissions.filter {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (notGranted.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, notGranted.toTypedArray(), PERMISSION_REQUEST_CODE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.any { it != PackageManager.PERMISSION_GRANTED }) {
+                Toast.makeText(this, "Permissions required for recording", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu, menu)
@@ -54,117 +106,53 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    // ---------------------- LANGUAGE SPINNERS ----------------------
-
     private fun setupLanguageSpinners() {
         val languages = resources.getStringArray(R.array.languages_list).toList()
-
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            languages
-        )
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languages)
 
         binding.spinnerInputLanguage.adapter = adapter
         binding.spinnerTargetLanguage.adapter = adapter
 
-        binding.spinnerInputLanguage.setSelection(0)
-        binding.spinnerTargetLanguage.setSelection(0)
-
-        binding.spinnerInputLanguage.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedInputLang = if (position == 0) null else languages[position]
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
+        binding.spinnerInputLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedInputLang = if (position == 0) null else langCodeMap[languages[position]]
             }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
-        binding.spinnerTargetLanguage.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedTargetLang = if (position == 0) null else languages[position]
+        binding.spinnerTargetLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedTargetLang = if (position == 0) null else langCodeMap[languages[position]]
 
-                    if (selectedInputLang != null &&
-                        selectedTargetLang != null &&
-                        selectedInputLang == selectedTargetLang
-                    ) {
-                        Toast.makeText(
-                            this@HomeActivity,
-                            "Input and target language cannot be the same. Please change target language.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        binding.spinnerTargetLanguage.setSelection(0)
-                        selectedTargetLang = null
-                    }
+                if (selectedInputLang != null && selectedTargetLang != null && selectedInputLang == selectedTargetLang) {
+                    Toast.makeText(this@HomeActivity, "Input and target cannot be same", Toast.LENGTH_SHORT).show()
+                    binding.spinnerTargetLanguage.setSelection(0)
+                    selectedTargetLang = null
                 }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
-
-    // ---------------------- BUTTON SETUP ----------------------
 
     private fun setupButtons() {
         binding.fabMicrophone.setOnClickListener {
             toggleRecording()
         }
 
-        binding.btnContinueQuestion.setOnClickListener {
-            Toast.makeText(
-                this,
-                "Continue logic will be handled with pause detection later.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
         binding.btnTranslate.setOnClickListener {
-            if (!validateLanguages()) return@setOnClickListener
-            startLoadingUI()
-
-            binding.btnTranslate.postDelayed({
-                onTranslationReady(durationMs = 5000L)  // fake 5s audio
-            }, 2000)
+            performTranslation()
         }
 
         binding.btnPlayPause.setOnClickListener {
-            Toast.makeText(this, "Play/Pause clicked (dummy)", Toast.LENGTH_SHORT).show()
+            togglePlayback()
         }
 
         binding.btnRetry.setOnClickListener {
-            binding.tvStatus.text = getString(R.string.status_tap_mic)
-            binding.tvAudioStatus.text = "Waiting for translation..."
-            binding.tvAudioDuration.text = "00:00"
-            binding.progressLoading.visibility = View.GONE
-            Toast.makeText(this, "Retry: please record your voice again.", Toast.LENGTH_SHORT)
-                .show()
+            resetUI()
         }
 
         binding.btnSwapLanguages.setOnClickListener {
-            val inputPos = binding.spinnerInputLanguage.selectedItemPosition
-            val targetPos = binding.spinnerTargetLanguage.selectedItemPosition
-
-            if (inputPos != 0 && targetPos != 0) {
-                binding.spinnerInputLanguage.setSelection(targetPos)
-                binding.spinnerTargetLanguage.setSelection(inputPos)
-            } else {
-                Toast.makeText(
-                    this,
-                    "Select both languages before swapping.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            swapLanguages()
         }
 
         binding.btnReset.setOnClickListener {
@@ -172,22 +160,8 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateLanguages(): Boolean {
-        if (selectedInputLang == null) {
-            Toast.makeText(this, "Please select input language.", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (selectedTargetLang == null) {
-            Toast.makeText(this, "Please select target language.", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        return true
-    }
-
-    // ---------------------- RECORDING FLOW (DUMMY) ----------------------
-
     private fun toggleRecording() {
-        if (!isRecording) {
+        if (!audioRecorder.isRecording()) {
             startRecording()
         } else {
             stopRecording()
@@ -197,96 +171,153 @@ class HomeActivity : AppCompatActivity() {
     private fun startRecording() {
         if (!validateLanguages()) return
 
-        isRecording = true
-        binding.tvStatus.text = getString(R.string.status_listening)
-
-        val scaleX = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleX", 1f, 1.2f, 1f)
-        val scaleY = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleY", 1f, 1.2f, 1f)
-        scaleX.duration = 1000
-        scaleY.duration = 1000
-        scaleX.repeatCount = ObjectAnimator.INFINITE
-        scaleY.repeatCount = ObjectAnimator.INFINITE
-        scaleX.interpolator = AccelerateDecelerateInterpolator()
-        scaleY.interpolator = AccelerateDecelerateInterpolator()
-        scaleX.start()
-        scaleY.start()
-
-        binding.fabMicrophone.backgroundTintList = getColorStateList(R.color.recording)
-
-        binding.fabMicrophone.postDelayed({
-            if (isRecording) stopRecording()
-        }, 3000)
+        try {
+            recordedFile = audioRecorder.startRecording()
+            binding.tvStatus.text = getString(R.string.status_listening)
+            animateMicrophone(true)
+            binding.fabMicrophone.backgroundTintList = getColorStateList(R.color.recording)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Recording failed: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun stopRecording() {
-        isRecording = false
+        try {
+            recordedFile = audioRecorder.stopRecording()
+            binding.tvStatus.text = "Recording saved. Tap Translate."
+            animateMicrophone(false)
+            binding.fabMicrophone.backgroundTintList = getColorStateList(R.color.primary)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Stop recording failed: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun performTranslation() {
+        if (!validateLanguages()) return
+
+        // Check if Bengali or Odia is selected
+        if (selectedInputLang == "bn" || selectedInputLang == "od" ||
+            selectedTargetLang == "bn" || selectedTargetLang == "od") {
+            Toast.makeText(this, "Will be available soon", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val file = recordedFile
+        if (file == null) {
+            Toast.makeText(this, "Please record audio first", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         binding.tvStatus.text = getString(R.string.status_processing)
-
-        binding.fabMicrophone.clearAnimation()
-        binding.fabMicrophone.scaleX = 1f
-        binding.fabMicrophone.scaleY = 1f
-        binding.fabMicrophone.backgroundTintList = getColorStateList(R.color.primary)
-
-        startLoadingUI()
-
-        binding.fabMicrophone.postDelayed({
-            onTranslationReady(durationMs = 5000L)
-        }, 2000)
-    }
-
-    // ---------------------- AUDIO UI HELPERS ----------------------
-
-    private fun startLoadingUI() {
         binding.progressLoading.visibility = View.VISIBLE
-        binding.tvAudioStatus.text = "Translating and generating audio..."
-        binding.tvAudioDuration.text = "00:00"
+        binding.tvAudioStatus.text = "Translating..."
+
+        lifecycleScope.launch {
+            translationService.translate(file, selectedInputLang!!, selectedTargetLang!!)
+                .onSuccess { response ->
+                    binding.progressLoading.visibility = View.GONE
+                    binding.tvStatus.text = "Translation complete"
+                    binding.tvAudioStatus.text = "Translation: ${response.translatedText}"
+
+                    audioPlayer.play(response.audioUrl) {
+                        binding.btnPlayPause.setIconResource(android.R.drawable.ic_media_play)
+                    }
+
+                    val duration = audioPlayer.getDuration()
+                    if (duration > 0) {
+                        val seconds = duration / 1000
+                        binding.tvAudioDuration.text = String.format("%02d:%02d", seconds / 60, seconds % 60)
+                    }
+
+                    binding.btnPlayPause.setIconResource(android.R.drawable.ic_media_pause)
+                }
+                .onFailure { error ->
+                    binding.progressLoading.visibility = View.GONE
+                    binding.tvStatus.text = "Translation failed"
+                    binding.tvAudioStatus.text = "Error: ${error.message}"
+                    Toast.makeText(this@HomeActivity, "Error: ${error.message}", Toast.LENGTH_LONG).show()
+                }
+        }
     }
 
-    private fun onTranslationReady(durationMs: Long) {
-        binding.progressLoading.visibility = View.GONE
-        binding.tvAudioStatus.text = "Translation ready"
-
-        val totalSeconds = durationMs / 1000
-        val minutes = totalSeconds / 60
-        val seconds = totalSeconds % 60
-        binding.tvAudioDuration.text = String.format("%02d:%02d", minutes, seconds)
+    private fun togglePlayback() {
+        if (audioPlayer.isPlaying()) {
+            audioPlayer.pause()
+            binding.btnPlayPause.setIconResource(android.R.drawable.ic_media_play)
+        } else {
+            audioPlayer.resume()
+            binding.btnPlayPause.setIconResource(android.R.drawable.ic_media_pause)
+        }
     }
 
-    private fun resetAll() {
-        binding.spinnerInputLanguage.setSelection(0)
-        binding.spinnerTargetLanguage.setSelection(0)
-        selectedInputLang = null
-        selectedTargetLang = null
+    private fun animateMicrophone(start: Boolean) {
+        if (start) {
+            val scaleX = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleX", 1f, 1.2f, 1f)
+            val scaleY = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleY", 1f, 1.2f, 1f)
+            scaleX.duration = 1000
+            scaleY.duration = 1000
+            scaleX.repeatCount = ObjectAnimator.INFINITE
+            scaleY.repeatCount = ObjectAnimator.INFINITE
+            scaleX.interpolator = AccelerateDecelerateInterpolator()
+            scaleY.interpolator = AccelerateDecelerateInterpolator()
+            scaleX.start()
+            scaleY.start()
+        } else {
+            binding.fabMicrophone.clearAnimation()
+            binding.fabMicrophone.scaleX = 1f
+            binding.fabMicrophone.scaleY = 1f
+        }
+    }
 
-        isRecording = false
-        binding.fabMicrophone.clearAnimation()
-        binding.fabMicrophone.scaleX = 1f
-        binding.fabMicrophone.scaleY = 1f
-        binding.fabMicrophone.backgroundTintList = getColorStateList(R.color.primary)
+    private fun validateLanguages(): Boolean {
+        if (selectedInputLang == null) {
+            Toast.makeText(this, "Select input language", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (selectedTargetLang == null) {
+            Toast.makeText(this, "Select target language", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
 
+    private fun swapLanguages() {
+        val inputPos = binding.spinnerInputLanguage.selectedItemPosition
+        val targetPos = binding.spinnerTargetLanguage.selectedItemPosition
+
+        if (inputPos != 0 && targetPos != 0) {
+            binding.spinnerInputLanguage.setSelection(targetPos)
+            binding.spinnerTargetLanguage.setSelection(inputPos)
+        } else {
+            Toast.makeText(this, "Select both languages first", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun resetUI() {
         binding.tvStatus.text = getString(R.string.status_tap_mic)
         binding.tvAudioStatus.text = "Waiting for translation..."
         binding.tvAudioDuration.text = "00:00"
         binding.progressLoading.visibility = View.GONE
+        audioPlayer.stop()
+        recordedFile = null
+    }
 
-        Toast.makeText(this, "Reset complete.", Toast.LENGTH_SHORT).show()
+    private fun resetAll() {
+        resetUI()
+        binding.spinnerInputLanguage.setSelection(0)
+        binding.spinnerTargetLanguage.setSelection(0)
+        selectedInputLang = null
+        selectedTargetLang = null
+        animateMicrophone(false)
+        binding.fabMicrophone.backgroundTintList = getColorStateList(R.color.primary)
+        Toast.makeText(this, "Reset complete", Toast.LENGTH_SHORT).show()
     }
 
     private fun performSignOut() {
-
-        // Clear stored session
-        val prefs = getSharedPreferences("SpeechSyncPrefs", MODE_PRIVATE)
-        prefs.edit()
-            .clear()
-            .apply()
-
-        // Go back to LoginActivity & clear back stack
+        getSharedPreferences("SpeechSyncPrefs", MODE_PRIVATE).edit().clear().apply()
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-
-        // Kill current activity
         finish()
     }
-
 }

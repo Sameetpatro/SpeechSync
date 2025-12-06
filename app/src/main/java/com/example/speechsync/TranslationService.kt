@@ -8,6 +8,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 data class TranslationResponse(
     val recognizedText: String,
@@ -16,8 +17,15 @@ data class TranslationResponse(
 )
 
 class TranslationService {
-    private val client = OkHttpClient()
-    private val baseUrl = "https://legends-sherman-licenses-bare.trycloudflare.com"
+    // Increase timeouts significantly for processing-heavy operations
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)  // Connection timeout
+        .writeTimeout(60, TimeUnit.SECONDS)    // Upload timeout
+        .readTimeout(120, TimeUnit.SECONDS)    // Response timeout (2 minutes)
+        .callTimeout(180, TimeUnit.SECONDS)    // Total call timeout (3 minutes)
+        .build()
+
+    private val baseUrl = "https://speed-riders-protocols-too.trycloudflare.com"
 
     suspend fun translate(
         audioFile: File,
@@ -44,7 +52,8 @@ class TranslationService {
             val response = client.newCall(request).execute()
 
             if (!response.isSuccessful) {
-                throw IOException("Server error: ${response.code}")
+                val errorBody = response.body?.string() ?: "Unknown error"
+                throw IOException("Server error: ${response.code} - $errorBody")
             }
 
             val json = JSONObject(response.body?.string() ?: "")
@@ -52,7 +61,7 @@ class TranslationService {
 
             Result.success(
                 TranslationResponse(
-                    recognizedText = json.getString("recognized_text"),
+                    recognizedText = json.optString("recognized_text", ""),
                     translatedText = json.getString("translated_text"),
                     audioUrl = audioUrl
                 )

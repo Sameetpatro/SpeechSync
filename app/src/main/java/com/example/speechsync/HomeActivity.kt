@@ -208,34 +208,63 @@ class HomeActivity : AppCompatActivity() {
             return
         }
 
+        // Show initial processing state
         binding.tvStatus.text = getString(R.string.status_processing)
         binding.progressLoading.visibility = View.VISIBLE
-        binding.tvAudioStatus.text = "Translating..."
+        binding.tvAudioStatus.text = "Uploading audio..."
+
+        // Disable translate button to prevent multiple requests
+        binding.btnTranslate.isEnabled = false
 
         lifecycleScope.launch {
+            // Update status messages periodically
+            binding.tvAudioStatus.text = "Processing audio on server..."
+
             translationService.translate(file, selectedInputLang!!, selectedTargetLang!!)
                 .onSuccess { response ->
-                    binding.progressLoading.visibility = View.GONE
-                    binding.tvStatus.text = "Translation complete"
-                    binding.tvAudioStatus.text = "Translation: ${response.translatedText}"
+                    runOnUiThread {
+                        binding.progressLoading.visibility = View.GONE
+                        binding.tvStatus.text = "Translation complete"
+                        binding.tvAudioStatus.text = "Translation: ${response.translatedText}"
+                        binding.btnTranslate.isEnabled = true
 
-                    audioPlayer.play(response.audioUrl) {
-                        binding.btnPlayPause.setIconResource(android.R.drawable.ic_media_play)
+                        // Play audio
+                        audioPlayer.play(response.audioUrl) {
+                            runOnUiThread {
+                                binding.btnPlayPause.setIconResource(android.R.drawable.ic_media_play)
+                            }
+                        }
+
+                        val duration = audioPlayer.getDuration()
+                        if (duration > 0) {
+                            val seconds = duration / 1000
+                            binding.tvAudioDuration.text = String.format("%02d:%02d", seconds / 60, seconds % 60)
+                        }
+
+                        binding.btnPlayPause.setIconResource(android.R.drawable.ic_media_pause)
                     }
-
-                    val duration = audioPlayer.getDuration()
-                    if (duration > 0) {
-                        val seconds = duration / 1000
-                        binding.tvAudioDuration.text = String.format("%02d:%02d", seconds / 60, seconds % 60)
-                    }
-
-                    binding.btnPlayPause.setIconResource(android.R.drawable.ic_media_pause)
                 }
                 .onFailure { error ->
-                    binding.progressLoading.visibility = View.GONE
-                    binding.tvStatus.text = "Translation failed"
-                    binding.tvAudioStatus.text = "Error: ${error.message}"
-                    Toast.makeText(this@HomeActivity, "Error: ${error.message}", Toast.LENGTH_LONG).show()
+                    runOnUiThread {
+                        binding.progressLoading.visibility = View.GONE
+                        binding.tvStatus.text = "Translation failed"
+                        binding.btnTranslate.isEnabled = true
+
+                        val errorMessage = when {
+                            error.message?.contains("timeout", ignoreCase = true) == true ->
+                                "Request timed out. Please try again with shorter audio."
+                            error.message?.contains("Unable to resolve host", ignoreCase = true) == true ->
+                                "Network error. Check your internet connection."
+                            else -> error.message ?: "Unknown error occurred"
+                        }
+
+                        binding.tvAudioStatus.text = "Error: $errorMessage"
+                        Toast.makeText(
+                            this@HomeActivity,
+                            "Translation failed: $errorMessage",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
         }
     }
@@ -298,6 +327,7 @@ class HomeActivity : AppCompatActivity() {
         binding.tvAudioStatus.text = "Waiting for translation..."
         binding.tvAudioDuration.text = "00:00"
         binding.progressLoading.visibility = View.GONE
+        binding.btnTranslate.isEnabled = true
         audioPlayer.stop()
         recordedFile = null
     }

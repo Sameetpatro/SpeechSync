@@ -231,7 +231,7 @@
                     android:id="@+id/tvDevRole"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Research Intern • NLP and Speech • IIT Bhubaneswar"
+                    android:text="Research Intern • IIT Bhubaneswar"
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary_light"
                     android:layout_marginTop="2dp"/>

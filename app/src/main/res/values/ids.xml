@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="visualizationCard" type="id" />
+    <item name="visualizationView" type="id" />
+    <item name="placeholderLayout" type="id" />
+    <item name="resultCard" type="id" />
+</resources>

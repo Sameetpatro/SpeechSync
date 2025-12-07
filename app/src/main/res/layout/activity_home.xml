@@ -134,52 +134,103 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
-            <!-- Microphone Button -->
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabMicrophone"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:src="@drawable/ic_microphone"
-                app:fabCustomSize="72dp"
-                app:tint="@color/white"
-                app:backgroundTint="?colorPrimary"
-                app:elevation="6dp"
+            <!-- Visualization Space Card with Microphone -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/visualizationCard"
+                android:layout_width="0dp"
+                android:layout_height="280dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true"
+                app:cardBackgroundColor="?colorSurface"
                 app:layout_constraintTop_toBottomOf="@id/languageCard"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="24dp"/>
-
-            <!-- Status Text -->
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/status_tap_mic"
-                android:textSize="14sp"
-                android:textColor="@color/text_secondary_light"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@id/fabMicrophone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp"/>
-
-            <!-- "Do you want to continue" Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnContinueQuestion"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Do you want to continue?"
-                android:textSize="14sp"
-                style="@style/Widget.SpeechSync.Button"
-                app:cornerRadius="12dp"
-                app:layout_constraintTop_toBottomOf="@id/tvStatus"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="12dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"/>
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="20dp">
+
+                    <!-- Animated Wave Circle 1 (Outermost) -->
+                    <View
+                        android:id="@+id/waveCircle1"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="@drawable/circle_wave"
+                        android:visibility="invisible"
+                        android:alpha="0"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintVertical_bias="0.4" />
+
+                    <!-- Animated Wave Circle 2 (Middle) -->
+                    <View
+                        android:id="@+id/waveCircle2"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="@drawable/circle_wave"
+                        android:visibility="invisible"
+                        android:alpha="0"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintVertical_bias="0.4" />
+
+                    <!-- Animated Wave Circle 3 (Inner) -->
+                    <View
+                        android:id="@+id/waveCircle3"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="@drawable/circle_wave"
+                        android:visibility="invisible"
+                        android:alpha="0"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintVertical_bias="0.4" />
+
+                    <!-- Microphone Button (centered) -->
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fabMicrophone"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/ic_microphone"
+                        app:fabCustomSize="80dp"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Circle"
+                        app:tint="@color/white"
+                        app:backgroundTint="?colorPrimary"
+                        app:elevation="8dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintVertical_bias="0.4" />
+
+                    <!-- Status Text (below mic) -->
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/status_tap_mic"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary_light"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        app:layout_constraintTop_toBottomOf="@id/fabMicrophone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="16dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Translate Button -->
             <com.google.android.material.button.MaterialButton
@@ -192,10 +243,10 @@
                 app:cornerRadius="12dp"
                 app:icon="@android:drawable/ic_menu_rotate"
                 app:iconGravity="textStart"
-                app:layout_constraintTop_toBottomOf="@id/btnContinueQuestion"
+                app:layout_constraintTop_toBottomOf="@id/visualizationCard"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"/>
 

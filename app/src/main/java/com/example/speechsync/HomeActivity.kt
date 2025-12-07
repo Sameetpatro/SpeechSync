@@ -281,8 +281,9 @@ class HomeActivity : AppCompatActivity() {
 
     private fun animateMicrophone(start: Boolean) {
         if (start) {
-            val scaleX = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleX", 1f, 1.2f, 1f)
-            val scaleY = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleY", 1f, 1.2f, 1f)
+            // Microphone pulse animation
+            val scaleX = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleX", 1f, 1.1f, 1f)
+            val scaleY = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleY", 1f, 1.1f, 1f)
             scaleX.duration = 1000
             scaleY.duration = 1000
             scaleX.repeatCount = ObjectAnimator.INFINITE
@@ -291,11 +292,111 @@ class HomeActivity : AppCompatActivity() {
             scaleY.interpolator = AccelerateDecelerateInterpolator()
             scaleX.start()
             scaleY.start()
+
+            // Show and animate wave circles
+            startWaveAnimations()
         } else {
             binding.fabMicrophone.clearAnimation()
             binding.fabMicrophone.scaleX = 1f
             binding.fabMicrophone.scaleY = 1f
+
+            // Stop wave animations
+            stopWaveAnimations()
         }
+    }
+
+    private fun startWaveAnimations() {
+        // Make circles visible
+        binding.waveCircle1.visibility = View.VISIBLE
+        binding.waveCircle2.visibility = View.VISIBLE
+        binding.waveCircle3.visibility = View.VISIBLE
+
+        val animationDuration = 1500L // 1.5 seconds per wave
+        val delayBetweenWaves = 500L // 0.5 seconds between each wave
+
+        // Wave Circle 1 - First wave
+        val scale1X = ObjectAnimator.ofFloat(binding.waveCircle1, "scaleX", 1f, 2.5f)
+        val scale1Y = ObjectAnimator.ofFloat(binding.waveCircle1, "scaleY", 1f, 2.5f)
+        val alpha1 = ObjectAnimator.ofFloat(binding.waveCircle1, "alpha", 0.7f, 0f)
+        scale1X.duration = animationDuration
+        scale1Y.duration = animationDuration
+        alpha1.duration = animationDuration
+        scale1X.repeatCount = ObjectAnimator.INFINITE
+        scale1Y.repeatCount = ObjectAnimator.INFINITE
+        alpha1.repeatCount = ObjectAnimator.INFINITE
+        scale1X.interpolator = AccelerateDecelerateInterpolator()
+        scale1Y.interpolator = AccelerateDecelerateInterpolator()
+        alpha1.interpolator = AccelerateDecelerateInterpolator()
+
+        // Wave Circle 2 - Second wave (delayed)
+        val scale2X = ObjectAnimator.ofFloat(binding.waveCircle2, "scaleX", 1f, 2.5f)
+        val scale2Y = ObjectAnimator.ofFloat(binding.waveCircle2, "scaleY", 1f, 2.5f)
+        val alpha2 = ObjectAnimator.ofFloat(binding.waveCircle2, "alpha", 0.7f, 0f)
+        scale2X.duration = animationDuration
+        scale2Y.duration = animationDuration
+        alpha2.duration = animationDuration
+        scale2X.repeatCount = ObjectAnimator.INFINITE
+        scale2Y.repeatCount = ObjectAnimator.INFINITE
+        alpha2.repeatCount = ObjectAnimator.INFINITE
+        scale2X.interpolator = AccelerateDecelerateInterpolator()
+        scale2Y.interpolator = AccelerateDecelerateInterpolator()
+        alpha2.interpolator = AccelerateDecelerateInterpolator()
+        scale2X.startDelay = delayBetweenWaves
+        scale2Y.startDelay = delayBetweenWaves
+        alpha2.startDelay = delayBetweenWaves
+
+        // Wave Circle 3 - Third wave (delayed more)
+        val scale3X = ObjectAnimator.ofFloat(binding.waveCircle3, "scaleX", 1f, 2.5f)
+        val scale3Y = ObjectAnimator.ofFloat(binding.waveCircle3, "scaleY", 1f, 2.5f)
+        val alpha3 = ObjectAnimator.ofFloat(binding.waveCircle3, "alpha", 0.7f, 0f)
+        scale3X.duration = animationDuration
+        scale3Y.duration = animationDuration
+        alpha3.duration = animationDuration
+        scale3X.repeatCount = ObjectAnimator.INFINITE
+        scale3Y.repeatCount = ObjectAnimator.INFINITE
+        alpha3.repeatCount = ObjectAnimator.INFINITE
+        scale3X.interpolator = AccelerateDecelerateInterpolator()
+        scale3Y.interpolator = AccelerateDecelerateInterpolator()
+        alpha3.interpolator = AccelerateDecelerateInterpolator()
+        scale3X.startDelay = delayBetweenWaves * 2
+        scale3Y.startDelay = delayBetweenWaves * 2
+        alpha3.startDelay = delayBetweenWaves * 2
+
+        // Start all animations
+        scale1X.start()
+        scale1Y.start()
+        alpha1.start()
+        scale2X.start()
+        scale2Y.start()
+        alpha2.start()
+        scale3X.start()
+        scale3Y.start()
+        alpha3.start()
+    }
+
+    private fun stopWaveAnimations() {
+        // Fade out and hide circles
+        val fadeOut1 = ObjectAnimator.ofFloat(binding.waveCircle1, "alpha", binding.waveCircle1.alpha, 0f)
+        val fadeOut2 = ObjectAnimator.ofFloat(binding.waveCircle2, "alpha", binding.waveCircle2.alpha, 0f)
+        val fadeOut3 = ObjectAnimator.ofFloat(binding.waveCircle3, "alpha", binding.waveCircle3.alpha, 0f)
+
+        fadeOut1.duration = 300
+        fadeOut2.duration = 300
+        fadeOut3.duration = 300
+
+        fadeOut1.start()
+        fadeOut2.start()
+        fadeOut3.start()
+
+        // Hide after fade out
+        binding.waveCircle1.postDelayed({
+            binding.waveCircle1.visibility = View.INVISIBLE
+            binding.waveCircle2.visibility = View.INVISIBLE
+            binding.waveCircle3.visibility = View.INVISIBLE
+            binding.waveCircle1.clearAnimation()
+            binding.waveCircle2.clearAnimation()
+            binding.waveCircle3.clearAnimation()
+        }, 300)
     }
 
     private fun validateLanguages(): Boolean {

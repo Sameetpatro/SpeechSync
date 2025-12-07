@@ -63,4 +63,10 @@
         <item name="boxCornerRadiusBottomEnd">12dp</item>
     </style>
 
+    <!-- Circle Shape for FAB -->
+    <style name="ShapeAppearance.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

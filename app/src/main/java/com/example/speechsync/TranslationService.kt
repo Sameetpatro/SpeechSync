@@ -25,7 +25,7 @@ class TranslationService {
         .callTimeout(180, TimeUnit.SECONDS)    // Total call timeout (3 minutes)
         .build()
 
-    private val baseUrl = "https://speed-riders-protocols-too.trycloudflare.com"
+    private val baseUrl = "https://violations-deaths-genetic-marilyn.trycloudflare.com"
 
     suspend fun translate(
         audioFile: File,

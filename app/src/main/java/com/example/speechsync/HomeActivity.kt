@@ -15,8 +15,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.speechsync.databinding.ActivityHomeBinding
+import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -47,6 +49,9 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Set status bar color to match action bar
+        window.statusBarColor = getColor(R.color.primary)
+
         setSupportActionBar(binding.toolbarHome)
 
         audioRecorder = AudioRecorder(this)
@@ -56,6 +61,15 @@ class HomeActivity : AppCompatActivity() {
         checkPermissions()
         setupLanguageSpinners()
         setupButtons()
+
+        // Force status bar color + light icons
+        window.statusBarColor = ContextCompat.getColor(this, R.color.primary)
+        WindowInsetsControllerCompat(window, window.decorView)
+            .isAppearanceLightStatusBars = false
+
+        // If you’re using the toolbar as ActionBar
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbarHome)
+        setSupportActionBar(toolbar)
     }
 
     override fun onDestroy() {

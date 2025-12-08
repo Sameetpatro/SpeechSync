@@ -5,16 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Top App Bar -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarHome"
+    <!-- FIX: Wrap toolbar inside AppBarLayout -->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?colorPrimary"
-        app:title="@string/app_name"
-        app:titleTextColor="@android:color/white"
-        app:menu="@menu/home_menu"
-        app:elevation="4dp" />
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:paddingTop="24dp"
+            android:background="?colorPrimary"
+            app:title="@string/app_name"
+            app:titleTextColor="@android:color/white"
+            app:menu="@menu/home_menu"
+            app:elevation="4dp" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Scrollable Content -->
     <androidx.core.widget.NestedScrollView
@@ -22,8 +29,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:fillViewport="true"
-        android:padding="8dp"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:padding="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

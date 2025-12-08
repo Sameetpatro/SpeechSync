@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Base.Theme.SpeechSync" parent="Theme.Material3.DayNight.NoActionBar">
+
         <!-- Primary colors -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
@@ -14,18 +15,25 @@
         <!-- Background -->
         <item name="android:colorBackground">@color/background_light</item>
 
-        <!-- Status bar -->
+        <!-- STATUS BAR (only these two, nothing else) -->
         <item name="android:statusBarColor">@color/primary</item>
         <item name="android:windowLightStatusBar">false</item>
 
-        <!-- Material 3 Shape -->
+        <!-- OPTIONAL: nav bar, uncomment if you want bottom bar also blue -->
+        <!--
+        <item name="android:navigationBarColor">@color/primary</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        -->
+
+        <!-- Shapes -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.SpeechSync.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.SpeechSync.MediumComponent</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.SpeechSync.LargeComponent</item>
 
-        <!-- Button styles -->
+        <!-- Default widgets -->
         <item name="materialButtonStyle">@style/Widget.SpeechSync.Button</item>
         <item name="textInputStyle">@style/Widget.SpeechSync.TextInputLayout</item>
+
     </style>
 
     <!-- App theme -->
@@ -63,7 +71,7 @@
         <item name="boxCornerRadiusBottomEnd">12dp</item>
     </style>
 
-    <!-- Circle Shape for FAB -->
+    <!-- Circle shape for FAB -->
     <style name="ShapeAppearance.Circle" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>

@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- App Title + Subtitle -->
+
         <TextView
             android:id="@+id/tvAppTitle"
             android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
             android:gravity="center"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Tech Tags -->
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
                 android:background="@drawable/tag_background"/>
         </LinearLayout>
 
-        <!-- Supervisor Card -->
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardSupervisor"
             android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Photo + Name Row -->
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -140,7 +140,6 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- Description -->
                 <TextView
                     android:id="@+id/tvSupervisorDesc"
                     android:layout_width="match_parent"
@@ -151,7 +150,6 @@
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="12dp"/>
 
-                <!-- LinkedIn Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -166,7 +164,6 @@
                         android:layout_marginEnd="6dp"
                         app:tint="?colorPrimary" />
 
-                    <!-- Label -->
                     <TextView
                         android:id="@+id/tvSupervisorLinkedIn"
                         android:layout_width="wrap_content"
@@ -176,7 +173,6 @@
                         android:textColor="?colorPrimary"
                         android:layout_marginEnd="6dp"/>
 
-                    <!-- ACTUAL CLICKABLE URL (visible, small, autoLink) -->
                     <TextView
                         android:id="@+id/tvSupervisorLinkedInUrl"
                         android:layout_width="0dp"
@@ -195,7 +191,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Developer Card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardDeveloper"
             android:layout_width="match_parent"
@@ -240,7 +235,6 @@
                     android:textColor="@color/text_secondary_light"
                     android:layout_marginTop="2dp"/>
 
-                <!-- Short dev blurb -->
                 <TextView
                     android:id="@+id/tvDevDesc"
                     android:layout_width="match_parent"
@@ -251,7 +245,7 @@
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="10dp"/>
 
-                <!-- Dev LinkedIn Row -->
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -266,7 +260,7 @@
                         android:layout_marginEnd="6dp"
                         app:tint="?colorPrimary" />
 
-                    <!-- Label -->
+
                     <TextView
                         android:id="@+id/tvDevLinkedIn"
                         android:layout_width="wrap_content"
@@ -276,7 +270,7 @@
                         android:textColor="?colorPrimary"
                         android:layout_marginEnd="6dp"/>
 
-                    <!-- ACTUAL CLICKABLE URL -->
+
                     <TextView
                         android:id="@+id/tvDevLinkedInUrl"
                         android:layout_width="0dp"
@@ -295,7 +289,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Tiny footer -->
+
         <TextView
             android:id="@+id/tvFooter"
             android:layout_width="wrap_content"

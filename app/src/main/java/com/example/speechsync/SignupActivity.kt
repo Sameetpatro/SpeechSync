@@ -14,16 +14,11 @@ class SignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Add fade-in animation
         val fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
         binding.signupCard.startAnimation(fadeIn)
-
-        // Setup click listeners
         binding.btnSignup.setOnClickListener {
             createAccount()
         }
-
         binding.tvAlreadyHaveAccount.setOnClickListener {
             navigateToLogin()
         }
@@ -35,7 +30,6 @@ class SignupActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString().trim()
         val confirmPassword = binding.etConfirmPassword.text.toString().trim()
 
-        // Basic validation
         if (fullName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             return
@@ -46,10 +40,8 @@ class SignupActivity : AppCompatActivity() {
             return
         }
 
-        // Show success message
         Toast.makeText(this, getString(R.string.account_created), Toast.LENGTH_SHORT).show()
 
-        // Navigate back to LoginActivity
         navigateToLogin()
     }
 

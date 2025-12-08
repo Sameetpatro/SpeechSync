@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- FIX: Wrap toolbar inside AppBarLayout -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -23,7 +22,7 @@
             app:elevation="4dp" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Scrollable Content -->
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +35,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp">
 
-            <!-- Language Selection Card (clean layout) -->
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/languageCard"
                 android:layout_width="0dp"
@@ -58,7 +57,7 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Row label -->
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -69,14 +68,14 @@
                         android:fontFamily="sans-serif-medium"
                         android:layout_marginBottom="8dp" />
 
-                    <!-- Input / Swap / Target in one row -->
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical">
 
-                        <!-- Input language -->
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -98,7 +97,7 @@
                                 android:paddingHorizontal="4dp" />
                         </LinearLayout>
 
-                        <!-- Swap icon in center -->
+
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnSwapLanguages"
                             android:layout_width="40dp"
@@ -115,7 +114,6 @@
                             android:layout_marginEnd="8dp"
                             android:foreground="?attr/selectableItemBackgroundBorderless" />
 
-                        <!-- Target language -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -139,8 +137,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
-            <!-- Visualization Space Card with Microphone -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/visualizationCard"
                 android:layout_width="0dp"
@@ -161,7 +157,6 @@
                     android:layout_height="match_parent"
                     android:padding="20dp">
 
-                    <!-- Animated Wave Circle 1 (Outermost) -->
                     <View
                         android:id="@+id/waveCircle1"
                         android:layout_width="80dp"
@@ -175,7 +170,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintVertical_bias="0.4" />
 
-                    <!-- Animated Wave Circle 2 (Middle) -->
                     <View
                         android:id="@+id/waveCircle2"
                         android:layout_width="80dp"
@@ -189,7 +183,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintVertical_bias="0.4" />
 
-                    <!-- Animated Wave Circle 3 (Inner) -->
+
                     <View
                         android:id="@+id/waveCircle3"
                         android:layout_width="80dp"
@@ -203,7 +197,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintVertical_bias="0.4" />
 
-                    <!-- Microphone Button (centered) -->
+
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/fabMicrophone"
                         android:layout_width="80dp"
@@ -220,7 +214,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintVertical_bias="0.4" />
 
-                    <!-- Status Text (below mic) -->
+
                     <TextView
                         android:id="@+id/tvStatus"
                         android:layout_width="wrap_content"
@@ -238,7 +232,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Translate Button -->
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnTranslate"
                 android:layout_width="0dp"
@@ -256,7 +250,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"/>
 
-            <!-- Audio Status / Player Section -->
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/audioStatusCard"
                 android:layout_width="0dp"
@@ -277,7 +271,7 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
-                    <!-- Loading Indicator -->
+
                     <LinearLayout
                         android:id="@+id/loadingContainer"
                         android:layout_width="match_parent"
@@ -302,7 +296,7 @@
                             android:layout_marginStart="8dp"/>
                     </LinearLayout>
 
-                    <!-- Player Controls -->
+
                     <LinearLayout
                         android:id="@+id/playerContainer"
                         android:layout_width="match_parent"
@@ -331,7 +325,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Retry and Reset Buttons -->
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRetry"
                 android:layout_width="0dp"

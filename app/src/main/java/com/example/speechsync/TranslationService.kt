@@ -17,12 +17,11 @@ data class TranslationResponse(
 )
 
 class TranslationService {
-    // Increase timeouts significantly for processing-heavy operations
     private val client = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)  // Connection timeout
-        .writeTimeout(60, TimeUnit.SECONDS)    // Upload timeout
-        .readTimeout(120, TimeUnit.SECONDS)    // Response timeout (2 minutes)
-        .callTimeout(180, TimeUnit.SECONDS)    // Total call timeout (3 minutes)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(120, TimeUnit.SECONDS)
+        .callTimeout(180, TimeUnit.SECONDS)
         .build()
 
     private val baseUrl = "https://enrolled-eau-boats-largely.trycloudflare.com"

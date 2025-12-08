@@ -49,8 +49,15 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Set status bar color to match action bar
+        //UI color match done
         window.statusBarColor = getColor(R.color.primary)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.primary)
+        WindowInsetsControllerCompat(window, window.decorView)
+            .isAppearanceLightStatusBars = false
+
+
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbarHome)
+        setSupportActionBar(toolbar)
 
         setSupportActionBar(binding.toolbarHome)
 
@@ -58,18 +65,9 @@ class HomeActivity : AppCompatActivity() {
         translationService = TranslationService()
         audioPlayer = AudioPlayer(this)
 
+        setupButtons()
         checkPermissions()
         setupLanguageSpinners()
-        setupButtons()
-
-        // Force status bar color + light icons
-        window.statusBarColor = ContextCompat.getColor(this, R.color.primary)
-        WindowInsetsControllerCompat(window, window.decorView)
-            .isAppearanceLightStatusBars = false
-
-        // If you’re using the toolbar as ActionBar
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbarHome)
-        setSupportActionBar(toolbar)
     }
 
     override fun onDestroy() {
@@ -209,10 +207,9 @@ class HomeActivity : AppCompatActivity() {
     private fun performTranslation() {
         if (!validateLanguages()) return
 
-        // Check if Bengali or Odia is selected
         if (selectedInputLang == "bn" || selectedInputLang == "od" ||
             selectedTargetLang == "bn" || selectedTargetLang == "od") {
-            Toast.makeText(this, "Will be available soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -293,6 +290,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    //gpt generated animation
     private fun animateMicrophone(start: Boolean) {
         if (start) {
             // Microphone pulse animation
@@ -413,6 +411,7 @@ class HomeActivity : AppCompatActivity() {
         }, 300)
     }
 
+    //language check
     private fun validateLanguages(): Boolean {
         if (selectedInputLang == null) {
             Toast.makeText(this, "Select input language", Toast.LENGTH_SHORT).show()
@@ -425,6 +424,8 @@ class HomeActivity : AppCompatActivity() {
         return true
     }
 
+
+    //swap
     private fun swapLanguages() {
         val inputPos = binding.spinnerInputLanguage.selectedItemPosition
         val targetPos = binding.spinnerTargetLanguage.selectedItemPosition

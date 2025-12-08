@@ -18,3 +18,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+//convert this to splash activity later on 7.12.25

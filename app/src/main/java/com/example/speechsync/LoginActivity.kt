@@ -15,11 +15,9 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Add fade-in animation
         val fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
         binding.loginCard.startAnimation(fadeIn)
 
-        // Setup click listeners
         binding.btnLogin.setOnClickListener {
             loginUser()
         }
@@ -42,7 +40,6 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        // Navigate to HomeActivity with smooth transition
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)

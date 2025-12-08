@@ -24,7 +24,7 @@
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
             android:textColor="?colorPrimary"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="28dp"
             android:layout_marginBottom="4dp"/>
 
         <TextView
@@ -166,6 +166,7 @@
                         android:layout_marginEnd="6dp"
                         app:tint="?colorPrimary" />
 
+                    <!-- Label -->
                     <TextView
                         android:id="@+id/tvSupervisorLinkedIn"
                         android:layout_width="wrap_content"
@@ -173,20 +174,23 @@
                         android:text="LinkedIn • Dr. Abhik Jana"
                         android:textSize="13sp"
                         android:textColor="?colorPrimary"
-                        android:autoLink="web"
-                        android:textIsSelectable="true"
-                        android:linksClickable="true"
-                        android:layout_marginEnd="4dp"/>
+                        android:layout_marginEnd="6dp"/>
 
+                    <!-- ACTUAL CLICKABLE URL (visible, small, autoLink) -->
                     <TextView
                         android:id="@+id/tvSupervisorLinkedInUrl"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="https://www.linkedin.com/in/abhik-jana"
-                        android:textSize="0sp"
+                        android:textSize="11sp"
+                        android:textColor="?colorPrimary"
                         android:autoLink="web"
-                        android:visibility="gone"/>
+                        android:linksClickable="true"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -262,6 +266,7 @@
                         android:layout_marginEnd="6dp"
                         app:tint="?colorPrimary" />
 
+                    <!-- Label -->
                     <TextView
                         android:id="@+id/tvDevLinkedIn"
                         android:layout_width="wrap_content"
@@ -269,20 +274,23 @@
                         android:text="LinkedIn • Sameet Patro"
                         android:textSize="13sp"
                         android:textColor="?colorPrimary"
-                        android:autoLink="web"
-                        android:textIsSelectable="true"
-                        android:linksClickable="true"
-                        android:layout_marginEnd="4dp"/>
+                        android:layout_marginEnd="6dp"/>
 
+                    <!-- ACTUAL CLICKABLE URL -->
                     <TextView
                         android:id="@+id/tvDevLinkedInUrl"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="https://www.linkedin.com/in/sameet-patro-257257280/"
-                        android:textSize="0sp"
+                        android:textSize="11sp"
+                        android:textColor="?colorPrimary"
                         android:autoLink="web"
-                        android:visibility="gone"/>
+                        android:linksClickable="true"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

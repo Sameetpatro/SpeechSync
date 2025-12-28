@@ -19,12 +19,12 @@ data class TranslationResponse(
 class TranslationService {
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(70, TimeUnit.SECONDS)
         .readTimeout(120, TimeUnit.SECONDS)
         .callTimeout(180, TimeUnit.SECONDS)
         .build()
 
-    private val baseUrl = "https://enrolled-eau-boats-largely.trycloudflare.com"
+    private val baseUrl = "https://traditions-peoples-refined-heel.trycloudflare.com"
 
     suspend fun translate(
         audioFile: File,

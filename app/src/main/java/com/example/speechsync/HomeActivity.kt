@@ -447,7 +447,7 @@ class HomeActivity : AppCompatActivity() {
         audioPlayer.stop()
         recordedFile = null
     }
-
+    //reset solved
     private fun resetAll() {
         resetUI()
         binding.spinnerInputLanguage.setSelection(0)

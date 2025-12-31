@@ -18,13 +18,14 @@ data class TranslationResponse(
 
 class TranslationService {
     private val client = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(70, TimeUnit.SECONDS)
-        .readTimeout(120, TimeUnit.SECONDS)
-        .callTimeout(180, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(110, TimeUnit.SECONDS)
+        .readTimeout(150, TimeUnit.SECONDS)
+        .callTimeout(210, TimeUnit.SECONDS)
         .build()
 
-    private val baseUrl = "https://traditions-peoples-refined-heel.trycloudflare.com"
+    // Place your backend server here:
+    private val baseUrl = "URL HERE"
 
     suspend fun translate(
         audioFile: File,
@@ -70,3 +71,5 @@ class TranslationService {
         }
     }
 }
+
+//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

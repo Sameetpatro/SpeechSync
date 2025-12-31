@@ -33,11 +33,18 @@ class HomeActivity : AppCompatActivity() {
     private var selectedInputLang: String? = null
     private var selectedTargetLang: String? = null
 
+    // EXPANDED Language Code Mapping - now includes all IndicTrans2 supported languages
     private val langCodeMap = mapOf(
         "English" to "en",
         "Hindi" to "hi",
         "Bengali" to "bn",
-        "Odia" to "od"
+        "Odia" to "od",
+        "Marathi" to "mar",
+        "Tamil" to "ta",
+        "Telugu" to "te",
+        "Gujarati" to "gu",
+        "Kannada" to "kn",
+        "Malayalam" to "ml"
     )
 
     companion object {
@@ -54,7 +61,6 @@ class HomeActivity : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.primary)
         WindowInsetsControllerCompat(window, window.decorView)
             .isAppearanceLightStatusBars = false
-
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbarHome)
         setSupportActionBar(toolbar)
@@ -207,12 +213,6 @@ class HomeActivity : AppCompatActivity() {
     private fun performTranslation() {
         if (!validateLanguages()) return
 
-        if (selectedInputLang == "bn" || selectedInputLang == "od" ||
-            selectedTargetLang == "bn" || selectedTargetLang == "od") {
-            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
-            return
-        }
-
         val file = recordedFile
         if (file == null) {
             Toast.makeText(this, "Please record audio first", Toast.LENGTH_SHORT).show()
@@ -290,10 +290,8 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    //gpt generated animation
     private fun animateMicrophone(start: Boolean) {
         if (start) {
-            // Microphone pulse animation
             val scaleX = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleX", 1f, 1.1f, 1f)
             val scaleY = ObjectAnimator.ofFloat(binding.fabMicrophone, "scaleY", 1f, 1.1f, 1f)
             scaleX.duration = 1000
@@ -305,28 +303,23 @@ class HomeActivity : AppCompatActivity() {
             scaleX.start()
             scaleY.start()
 
-            // Show and animate wave circles
             startWaveAnimations()
         } else {
             binding.fabMicrophone.clearAnimation()
             binding.fabMicrophone.scaleX = 1f
             binding.fabMicrophone.scaleY = 1f
-
-            // Stop wave animations
             stopWaveAnimations()
         }
     }
 
     private fun startWaveAnimations() {
-        // Make circles visible
         binding.waveCircle1.visibility = View.VISIBLE
         binding.waveCircle2.visibility = View.VISIBLE
         binding.waveCircle3.visibility = View.VISIBLE
 
-        val animationDuration = 1500L // 1.5 seconds per wave
-        val delayBetweenWaves = 500L // 0.5 seconds between each wave
+        val animationDuration = 1500L
+        val delayBetweenWaves = 500L
 
-        // Wave Circle 1 - First wave
         val scale1X = ObjectAnimator.ofFloat(binding.waveCircle1, "scaleX", 1f, 2.5f)
         val scale1Y = ObjectAnimator.ofFloat(binding.waveCircle1, "scaleY", 1f, 2.5f)
         val alpha1 = ObjectAnimator.ofFloat(binding.waveCircle1, "alpha", 0.7f, 0f)
@@ -340,7 +333,6 @@ class HomeActivity : AppCompatActivity() {
         scale1Y.interpolator = AccelerateDecelerateInterpolator()
         alpha1.interpolator = AccelerateDecelerateInterpolator()
 
-        // Wave Circle 2 - Second wave (delayed)
         val scale2X = ObjectAnimator.ofFloat(binding.waveCircle2, "scaleX", 1f, 2.5f)
         val scale2Y = ObjectAnimator.ofFloat(binding.waveCircle2, "scaleY", 1f, 2.5f)
         val alpha2 = ObjectAnimator.ofFloat(binding.waveCircle2, "alpha", 0.7f, 0f)
@@ -357,7 +349,6 @@ class HomeActivity : AppCompatActivity() {
         scale2Y.startDelay = delayBetweenWaves
         alpha2.startDelay = delayBetweenWaves
 
-        // Wave Circle 3 - Third wave (delayed more)
         val scale3X = ObjectAnimator.ofFloat(binding.waveCircle3, "scaleX", 1f, 2.5f)
         val scale3Y = ObjectAnimator.ofFloat(binding.waveCircle3, "scaleY", 1f, 2.5f)
         val alpha3 = ObjectAnimator.ofFloat(binding.waveCircle3, "alpha", 0.7f, 0f)
@@ -374,7 +365,6 @@ class HomeActivity : AppCompatActivity() {
         scale3Y.startDelay = delayBetweenWaves * 2
         alpha3.startDelay = delayBetweenWaves * 2
 
-        // Start all animations
         scale1X.start()
         scale1Y.start()
         alpha1.start()
@@ -387,7 +377,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun stopWaveAnimations() {
-        // Fade out and hide circles
         val fadeOut1 = ObjectAnimator.ofFloat(binding.waveCircle1, "alpha", binding.waveCircle1.alpha, 0f)
         val fadeOut2 = ObjectAnimator.ofFloat(binding.waveCircle2, "alpha", binding.waveCircle2.alpha, 0f)
         val fadeOut3 = ObjectAnimator.ofFloat(binding.waveCircle3, "alpha", binding.waveCircle3.alpha, 0f)
@@ -400,7 +389,6 @@ class HomeActivity : AppCompatActivity() {
         fadeOut2.start()
         fadeOut3.start()
 
-        // Hide after fade out
         binding.waveCircle1.postDelayed({
             binding.waveCircle1.visibility = View.INVISIBLE
             binding.waveCircle2.visibility = View.INVISIBLE
@@ -411,7 +399,6 @@ class HomeActivity : AppCompatActivity() {
         }, 300)
     }
 
-    //language check
     private fun validateLanguages(): Boolean {
         if (selectedInputLang == null) {
             Toast.makeText(this, "Select input language", Toast.LENGTH_SHORT).show()
@@ -424,8 +411,6 @@ class HomeActivity : AppCompatActivity() {
         return true
     }
 
-
-    //swap
     private fun swapLanguages() {
         val inputPos = binding.spinnerInputLanguage.selectedItemPosition
         val targetPos = binding.spinnerTargetLanguage.selectedItemPosition
@@ -447,7 +432,7 @@ class HomeActivity : AppCompatActivity() {
         audioPlayer.stop()
         recordedFile = null
     }
-    //reset solved
+
     private fun resetAll() {
         resetUI()
         binding.spinnerInputLanguage.setSelection(0)

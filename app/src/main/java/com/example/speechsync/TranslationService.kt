@@ -71,5 +71,3 @@ class TranslationService {
         }
     }
 }
-
-//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
